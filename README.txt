@@ -16,11 +16,16 @@ digraph G {
 }
  
 Libraries (TODO still) not related to mlpack:
-- gtest
 - libpca
 
+****** gtest for Windows (tested with win 7) *******
+1) Open command line with "MSBuild Command Prompt for VS2015"
+2) cd to build directory, e.g., "cd c:\Users\Kari\build". Remove CMakeCache.txt
+   if it exists from a previous build with MSYS makefiles.
+3) cmake -DINSTALL_ROOT=C:/Users/Kari/build/root -G "Visual Studio 14 2015 Win64" C:/Users/Kari/Documents/work/github/libs
+4) Run "msbuild gtest-build.vcxproj"
 
-****** Windows (tested with win 7) *******
+****** mlpack for Windows (tested with win 7) *******
 Prerequisites
 1) Download MinGW from
 https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/rubenvb/gcc-4.8-release/x86_64-w64-mingw32-gcc-4.8.0-win64_rubenvb.7z/download
@@ -66,7 +71,7 @@ Before you build:
    d) Continue the build, see the dependency graph about which order to build.
   
 
-Build (tested with cmake 3.0.1)
+Build (tested with cmake 3.3.1)
 1) Open MSYS prompt by running "C:\mingw64\msys\msys.bat"
 2) Cd to the build folder, e.g., "cd /c/Users/Kari/build/"
 3) Run cmake and set INSTALL_ROOT to a directory where all libs are to be
@@ -76,7 +81,7 @@ Build (tested with cmake 3.0.1)
 4) Build and install, e.g., "make mlpack-build". Running "make help" shows
    all the targets.
 
-****** Linux (TODO, not ready yet) ******
+****** mlpack for Linux (TODO, not ready yet) ******
 1) Create a build folder, e.g., ~/build, and cd there. 
 2) Run cmake, e.g., cmake -DINSTALL_ROOT=/home/kari/work/mooselab/cpp/deps-root ../deps
 3) run make

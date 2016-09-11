@@ -21,9 +21,9 @@ message("Parallel build with ${JJ} cores")
 # gtest
 ExternalProject_Add(gtest-download
   PREFIX downloads/gtest-download
-  URL https://github.com/google/googletest/archive/release-1.7.0.zip
-  DOWNLOAD_NAME gtest-1.7.0.zip
-  URL_HASH SHA1=f89bc9f55477df2fde082481e2d709bfafdb057b
+  URL https://github.com/google/googletest/archive/release-1.8.0.zip
+  DOWNLOAD_NAME gtest-1.8.0.zip
+  URL_HASH SHA1=667f873ab7a4d246062565fad32fb6d8e203ee73
   CONFIGURE_COMMAND ""
   BUILD_COMMAND ""
   INSTALL_COMMAND ""
@@ -110,7 +110,7 @@ if (DEFINED UNIX)
     PREFIX builds/gtest-build
     DEPENDS gtest-download
     URL ${download_dir}/${download_name}
-    URL_HASH SHA1=f89bc9f55477df2fde082481e2d709bfafdb057b
+    URL_HASH SHA1=667f873ab7a4d246062565fad32fb6d8e203ee73
     BUILD_COMMAND make -j${JJ}    
     INSTALL_COMMAND ${CMAKE_COMMAND} -DINSTALL_ROOT=${INSTALL_ROOT} -DBUILD_DIR=${PROJECT_BINARY_DIR}/builds/gtest-build/src/gtest-build-build -P  ${CMAKE_CURRENT_LIST_DIR}/install_gtest.txt
   )
@@ -121,11 +121,11 @@ if (DEFINED WIN32)
     PREFIX builds/gtest-build
     DEPENDS gtest-download
     URL ${download_dir}/${download_name}
-    URL_HASH SHA1=f89bc9f55477df2fde082481e2d709bfafdb057b
-    CMAKE_GENERATOR "Visual Studio 12 2013 Win64"
-    CMAKE_ARGS -Dgtest_force_shared_crt=ON
-    BUILD_COMMAND msbuild ALL_BUILD.vcxproj /p:configuration=debug COMMAND msbuild ALL_BUILD.vcxproj /p:configuration=release
-    INSTALL_COMMAND ${CMAKE_COMMAND} -DDEBUG=debug -DRELEASE=release -DINSTALL_ROOT=${INSTALL_ROOT} -DBUILD_DIR=${PROJECT_BINARY_DIR}/builds/gtest-build/src/gtest-build-build -P  ${CMAKE_CURRENT_LIST_DIR}/install_gtest.txt
+    URL_HASH SHA1=667f873ab7a4d246062565fad32fb6d8e203ee73
+    CMAKE_GENERATOR "Visual Studio 14 2015 Win64"
+    CMAKE_ARGS -Dgtest_force_shared_crt=ON -DCMAKE_INSTALL_PREFIX=${INSTALL_ROOT}
+    BUILD_COMMAND msbuild ALL_BUILD.vcxproj /p:configuration=release
+    INSTALL_COMMAND msbuild INSTALL.vcxproj /p:configuration=release    
   )
 endif()
 
