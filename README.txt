@@ -23,7 +23,7 @@ Libraries (TODO still) not related to mlpack:
 2) cd to build directory, e.g., "cd c:\Users\Kari\build". Remove CMakeCache.txt
    if it exists from a previous build with MSYS makefiles.
 3) cmake -DINSTALL_ROOT=C:/Users/Kari/build/root -G "Visual Studio 14 2015 Win64" C:/Users/Kari/Documents/work/github/libs
-4) Run "msbuild gtest-build.vcxproj"
+4) Run "msbuild gtest-build.vcxproj". Debug and release versions are created.
 
 ****** mlpack for Windows (tested with win 7) *******
 Prerequisites

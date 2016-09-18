@@ -123,9 +123,10 @@ if (DEFINED WIN32)
     URL ${download_dir}/${download_name}
     URL_HASH SHA1=667f873ab7a4d246062565fad32fb6d8e203ee73
     CMAKE_GENERATOR "Visual Studio 14 2015 Win64"
-    CMAKE_ARGS -Dgtest_force_shared_crt=ON -DCMAKE_INSTALL_PREFIX=${INSTALL_ROOT}
-    BUILD_COMMAND msbuild ALL_BUILD.vcxproj /p:configuration=release
-    INSTALL_COMMAND msbuild INSTALL.vcxproj /p:configuration=release    
+    CMAKE_ARGS -Dgtest_force_shared_crt=ON -DCMAKE_INSTALL_PREFIX=${INSTALL_ROOT} -DCMAKE_DEBUG_POSTFIX=d
+    BUILD_COMMAND msbuild ALL_BUILD.vcxproj /p:configuration=release COMMAND msbuild ALL_BUILD.vcxproj /p:configuration=debug
+    INSTALL_COMMAND msbuild INSTALL.vcxproj /p:configuration=release COMMAND msbuild INSTALL.vcxproj /p:configuration=debug    
+    #INSTALL_COMMAND ""
   )
 endif()
 
