@@ -28,6 +28,17 @@ ExternalProject_Add(gtest-download
   BUILD_COMMAND ""
   INSTALL_COMMAND ""
 )
+
+ExternalProject_Add(protobuf-download
+  PREFIX downloads/protobuf-download
+  URL https://github.com/google/protobuf/releases/download/v3.1.0/protobuf-cpp-3.1.0.zip
+  DOWNLOAD_NAME protobuf-cpp-3.1.0.zip
+  URL_HASH SHA1=6875d95f2a9608ee7d8330a680c54e2818ca3cc9  
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ""
+  INSTALL_COMMAND ""
+)
+
 #OpenBlas
 ExternalProject_Add(openblas-download
   PREFIX downloads/openblas-download
@@ -122,14 +133,25 @@ if (DEFINED WIN32)
     DEPENDS gtest-download
     URL ${download_dir}/${download_name}
     URL_HASH SHA1=667f873ab7a4d246062565fad32fb6d8e203ee73
-    CMAKE_GENERATOR "Visual Studio 14 2015 Win64"
     CMAKE_ARGS -Dgtest_force_shared_crt=ON -DCMAKE_INSTALL_PREFIX=${INSTALL_ROOT} -DCMAKE_DEBUG_POSTFIX=d
     BUILD_COMMAND msbuild ALL_BUILD.vcxproj /p:configuration=release COMMAND msbuild ALL_BUILD.vcxproj /p:configuration=debug
     INSTALL_COMMAND msbuild INSTALL.vcxproj /p:configuration=release COMMAND msbuild INSTALL.vcxproj /p:configuration=debug    
-    #INSTALL_COMMAND ""
   )
 endif()
 
+# Protocol buffers
+ExternalProject_Get_Property(protobuf-download download_dir download_name)
+if (DEFINED WIN32)
+ExternalProject_Add(protobuf-build
+    PREFIX builds/protobuf-build
+    DEPENDS protobuf-download gtest-build
+    URL ${download_dir}/${download_name}
+    URL_HASH SHA1=6875d95f2a9608ee7d8330a680c54e2818ca3cc9
+    CONFIGURE_COMMAND cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_ROOT} -DCMAKE_PREFIX_PATH=${INSTALL_ROOT} -DCMAKE_DEBUG_POSTFIX=d ../protobuf-build/cmake 
+    BUILD_COMMAND msbuild ALL_BUILD.vcxproj /p:configuration=release COMMAND msbuild ALL_BUILD.vcxproj /p:configuration=debug
+    INSTALL_COMMAND msbuild INSTALL.vcxproj /p:configuration=release COMMAND msbuild INSTALL.vcxproj /p:configuration=debug
+  )
+endif()
 # OpenBLAS
 ExternalProject_Get_Property(openblas-download download_dir download_name)
 if (DEFINED UNIX)

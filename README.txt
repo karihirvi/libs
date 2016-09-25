@@ -11,19 +11,20 @@ digraph G {
   Armadillo -> "ARPACK-NG"
   mlpack -> Boost
   mlpack -> Armadillo
-
+  
   {rank = same; OpenBLAS; "ARPACK-NG"; Boost}
 }
  
 Libraries (TODO still) not related to mlpack:
 - libpca
 
-****** gtest for Windows (tested with win 7) *******
+****** gtest and protobuf for Windows (tested with win 7) *******
 1) Open command line with "MSBuild Command Prompt for VS2015"
 2) cd to build directory, e.g., "cd c:\Users\Kari\build". Remove CMakeCache.txt
    if it exists from a previous build with MSYS makefiles.
 3) cmake -DINSTALL_ROOT=C:/Users/Kari/build/root -G "Visual Studio 14 2015 Win64" C:/Users/Kari/Documents/work/github/libs
 4) Run "msbuild gtest-build.vcxproj". Debug and release versions are created.
+5) Run "msbuild protobuf-build.vcxproj". Debug and release versions are created.
 
 ****** mlpack for Windows (tested with win 7) *******
 Prerequisites
