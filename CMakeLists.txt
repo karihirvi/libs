@@ -28,7 +28,7 @@ ExternalProject_Add(gtest-download
   BUILD_COMMAND ""
   INSTALL_COMMAND ""
 )
-
+# Protocol buffers
 ExternalProject_Add(protobuf-download
   PREFIX downloads/protobuf-download
   URL https://github.com/google/protobuf/releases/download/v3.1.0/protobuf-cpp-3.1.0.zip
@@ -144,14 +144,35 @@ ExternalProject_Get_Property(protobuf-download download_dir download_name)
 if (DEFINED WIN32)
 ExternalProject_Add(protobuf-build
     PREFIX builds/protobuf-build
-    DEPENDS protobuf-download gtest-build
+    DEPENDS protobuf-download 
+    #gtest-build
     URL ${download_dir}/${download_name}
-    URL_HASH SHA1=6875d95f2a9608ee7d8330a680c54e2818ca3cc9
-    CONFIGURE_COMMAND cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_ROOT} -DCMAKE_PREFIX_PATH=${INSTALL_ROOT} -DCMAKE_DEBUG_POSTFIX=d ../protobuf-build/cmake 
+    URL_HASH SHA1=6875d95f2a9608ee7d8330a680c54e2818ca3cc9    
+    CONFIGURE_COMMAND cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_ROOT} -DCMAKE_PREFIX_PATH=${INSTALL_ROOT} -DCMAKE_DEBUG_POSTFIX=d  ../protobuf-build/cmake 
     BUILD_COMMAND msbuild ALL_BUILD.vcxproj /p:configuration=release COMMAND msbuild ALL_BUILD.vcxproj /p:configuration=debug
     INSTALL_COMMAND msbuild INSTALL.vcxproj /p:configuration=release COMMAND msbuild INSTALL.vcxproj /p:configuration=debug
   )
 endif()
+
+if (DEFINED WIN32)  
+  ExternalProject_Add(grpc-build
+    PREFIX builds/grpc-build    
+    #DEPENDS protobuf-build
+    #GIT_REPOSITORY git@github.com:grpc/grpc.git
+    GIT_REPOSITORY https://github.com/grpc/grpc.git
+    GIT_TAG v1.0.0
+    GIT_SUBMODULES
+    #CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${INSTALL_ROOT} -DCMAKE_PREFIX_PATH=${INSTALL_ROOT} -DCMAKE_DEBUG_POSTFIX=d 
+    CONFIGURE_COMMAND ""
+    BUILD_IN_SOURCE 1
+    BUILD_COMMAND export CPPFLAGS=-I/c/OpenSSL-Win64/include\ -D_WIN32_WINNT=0x600\ -w && export LDFLAGS=-L/c/OpenSSL-Win64/lib &&  make static_cxx -j${JJ}
+    INSTALL_COMMAND prefix=${INSTALL_ROOT} make install-static_cxx install-plugins
+    #INSTALL_COMMAND prefix=${INSTALL_ROOT} make install-static_cxx
+    #INSTALL_COMMAND prefix=${INSTALL_ROOT} make install-headers_cxx COMMAND prefix=${INSTALL_ROOT} make install-static_c
+  )
+endif()
+
+
 # OpenBLAS
 ExternalProject_Get_Property(openblas-download download_dir download_name)
 if (DEFINED UNIX)
@@ -166,7 +187,6 @@ if (DEFINED UNIX)
     INSTALL_COMMAND make PREFIX=${INSTALL_ROOT} install
   )
 endif()
-
 if (DEFINED WIN32)
   string(REPLACE "/" "\\" INSTALL_ROOT_WIN ${INSTALL_ROOT})
   ExternalProject_Add(openblas-build
@@ -199,7 +219,6 @@ if (DEFINED UNIX)
     INSTALL_COMMAND make install
   )
 endif()
-
 if (DEFINED WIN32)
   ExternalProject_Add(lapack-build
     PREFIX builds/lapack-build
@@ -226,7 +245,6 @@ if (DEFINED UNIX)
     INSTALL_COMMAND make install
   )
 endif()
-
 if (DEFINED WIN32)
   ExternalProject_Add(arpackng-build
     PREFIX builds/arpackng-build
@@ -258,7 +276,6 @@ if (DEFINED UNIX)
     INSTALL_COMMAND make install
   )
 endif()
-
 if (DEFINED WIN32)
   ExternalProject_Add(armadillo-build
     PREFIX builds/armadillo-build
@@ -304,6 +321,7 @@ if (DEFINED WIN32)
   )
 endif()
 
+# mlpack
 ExternalProject_Get_Property(mlpack-download download_dir download_name)
 if (DEFINED WIN32)
   ExternalProject_Add(mlpack-build
